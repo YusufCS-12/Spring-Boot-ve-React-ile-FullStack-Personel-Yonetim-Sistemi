@@ -3,6 +3,7 @@ package netyusufcs.springboot.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,13 @@ import netyusufcs.springboot.repository.EmployeeRepository;
   o sınıfın belirtilen URL ile ilgili tüm işleri yapması sağlanır.
   Metod üzerinde kullanıldığı zaman daha spesifik URL'ye göre işlem yapılması sağlanmış olur.
  */
+@CrossOrigin(origins = "http://localhost:3000")
+
+/*CORS kısaca kendi uygulamamızın başka bir uygulamaya bağlanma işleminin yönetilmesidir. Uygulamalar arası haberleşmenin istemci tarafından izin verilmesi gerekmektedir.
+
+Spring Boot uygulamamızda oluşturduğumuz servislerin 
+diğer uygulamalar ile haberleşebilmesi için CORS desteğini açmamız gerekiyor.
+ Bu desteği ise @CrossOrigin anotasyonu ile sağlamaktayız.*/
 @RestController
 @RequestMapping("/api/V1")
 public class EmployeeController {
