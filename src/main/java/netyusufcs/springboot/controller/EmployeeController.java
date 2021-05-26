@@ -1,10 +1,13 @@
 package netyusufcs.springboot.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import netyusufcs.springboot.exception.ResourceNotFounException;
 import netyusufcs.springboot.model.Employee;
 import netyusufcs.springboot.repository.EmployeeRepository;
-
 
 @CrossOrigin(origins = "http://localhost:3000")
 
@@ -32,26 +34,24 @@ import netyusufcs.springboot.repository.EmployeeRepository;
 @RestController
 @RequestMapping("/api/V1")
 
-/*@RestController bir Spring uygulamasında
-bir Rest-ful denetleyicisi oluşturmak için
-açıklamanın nasıl kullanılacağını gösterir.
-Bu anotasyon aslında @Controller ve @ResponseBody 
-anotasyonlarının bileşimi.
-@ResponseBody ise cevabın 
-JSON olarak gönderimesini sağlar.
-@RequestMapping annotasyonu /appointments gibi
- URL'lerin bir sınıf
- veya metod tarafından map edilmesini sağlar.
- Sınıf üzerinde kullanıldığı zaman,
- o sınıfın belirtilen URL ile ilgili tüm işleri yapması sağlanır.
- Metod üzerinde kullanıldığı zaman daha spesifik URL'ye göre işlem yapılması sağlanmış olur.
-*/
+/*
+ * @RestController bir Spring uygulamasında bir Rest-ful denetleyicisi
+ * oluşturmak için açıklamanın nasıl kullanılacağını gösterir. Bu anotasyon
+ * aslında @Controller ve @ResponseBody anotasyonlarının bileşimi.
+ * 
+ * @ResponseBody ise cevabın JSON olarak gönderimesini sağlar.
+ * 
+ * @RequestMapping annotasyonu /appointments gibi URL'lerin bir sınıf veya metod
+ * tarafından map edilmesini sağlar. Sınıf üzerinde kullanıldığı zaman, o
+ * sınıfın belirtilen URL ile ilgili tüm işleri yapması sağlanır. Metod üzerinde
+ * kullanıldığı zaman daha spesifik URL'ye göre işlem yapılması sağlanmış olur.
+ */
 
 public class EmployeeController {
 	/*
 	 * @Autowired temel olarak Dependecy Injection mantığıyla gelmiştir. Bu
-	 * annatotion ile bir bean spring framework kontrolünde başka bir sınıfa
-	 * inject edilir.
+	 * annatotion ile bir bean spring framework kontrolünde başka bir sınıfa inject
+	 * edilir.
 	 */
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -69,31 +69,42 @@ public class EmployeeController {
 		return employeeRepository.save(employee);
 
 	}
-	
-	// Rest Api ile işçi bilgisini getirme kodlarımız 
+
+	// Rest Api ile işçi bilgisini getirme kodlarımız
 	@GetMapping("/employees/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
 		Employee employee = employeeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFounException("Bu id için personel bulunamadı :" + id));
 		return ResponseEntity.ok(employee);
 	}
-	
+
 	// Rest Api ile işçi güncelleme kodlarımız
 	@PutMapping("/employees/{id}")
-	public ResponseEntity<Employee> uptadeEmployee(@PathVariable Long id , @RequestBody Employee employeeDetails){
-		
+	public ResponseEntity<Employee> uptadeEmployee(@PathVariable Long id, @RequestBody Employee employeeDetails) {
+
 		Employee employee = employeeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFounException("Bu id için personel bulunamadı :" + id));
-		
+
 		employee.setFirstName(employeeDetails.getFirstName());
 		employee.setLastName(employeeDetails.getLastName());
 		employee.setEmailId(employeeDetails.getEmailId());
-		
+
 		Employee updatedEmployee = employeeRepository.save(employee);
 		return ResponseEntity.ok(updatedEmployee);
-		
+
 	}
-	
-	
+
+	// Rest Api ile işçi silme kodlarımız
+	@DeleteMapping("/employees/{id}")
+	public ResponseEntity<Map<String, Boolean>> deleteEmployee(@PathVariable Long id) {
+		
+		Employee employee = employeeRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFounException("Bu id için personel bulunamadı :" + id));
+
+		employeeRepository.delete(employee);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return ResponseEntity.ok(response);
+	}
 
 }
