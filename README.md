@@ -1,6 +1,6 @@
 # Spring-Boot-ve-React-ile-FullStack-Personel-Yonetim-Sistemi
 
-•	Bu video serisinde bir full-stack web uygulamasını İşçi Yönetim Aplikasyonu üzerinden öğreneceğiz.
+•	Bu projede bir full-stack web uygulamasını İşçi Yönetim Aplikasyonu üzerinden öğreneceğiz.
 •	React ve Spring Boot kullanacağız
 •	CRUD işlemlerini gerçekleştireceğiz
 •	İşçi Ekleme , İşçileri Listeleme , İşçileri Güncelleme ve Silme işlemlerini sağlayacağız
